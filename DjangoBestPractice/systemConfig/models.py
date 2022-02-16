@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+import time
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -23,7 +23,7 @@ class CIB(models.Model):
 
 class CIC(models.Model):
     # 创建时间
-    created_at = models.IntegerField(default=datetime.now, verbose_name="创建时间", help_text="创建时间")
+    created_at = models.IntegerField(default=time.time(), verbose_name="创建时间", help_text="创建时间")
 
     class Meta:
         abstract = True  # 指定是抽象类
@@ -31,7 +31,7 @@ class CIC(models.Model):
 
 class CID(models.Model):
     # 更新时间
-    updated_at = models.IntegerField(default=datetime.now, verbose_name="最后更新时间", help_text="最后更新时间")
+    updated_at = models.IntegerField(default=time.time(), verbose_name="最后更新时间", help_text="最后更新时间")
 
     class Meta:
         abstract = True  # 指定是抽象类
@@ -97,15 +97,15 @@ class CommonInfoG(CIA):
 
 
 class AccessLog(CommonInfoF):
-    req_url = models.URLField(verbose_name="请求url", help_text="请求url")
-    req_method = models.SmallIntegerField(verbose_name="请求方式", help_text="请求方式")
-    req_query = models.TextField(verbose_name="请求参数", help_text="请求参数")
-    req_body = models.TextField(verbose_name="请求body", help_text="请求body")
-    req_ip = models.CharField(max_length=32, verbose_name="请求IP", help_text="请求IP")
-    req_user = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name="访问者", help_text="访问者")
-    resp_body = models.TextField(verbose_name="响应body", help_text="响应body")
-    resp_status_code = models.SmallIntegerField(verbose_name="响应状态码", help_text="响应状态码")
-    resp_time = models.IntegerField(verbose_name="请求耗时", help_text="请求耗时")
+    req_url = models.URLField(null=True, verbose_name="请求url", help_text="请求url")
+    req_method = models.CharField(null=True, max_length=8, verbose_name="请求方式", help_text="请求方式")
+    req_query = models.TextField(null=True, verbose_name="请求参数", help_text="请求参数")
+    req_body = models.TextField(null=True, verbose_name="请求body", help_text="请求body")
+    req_ip = models.CharField(null=True, max_length=32, verbose_name="请求IP", help_text="请求IP")
+    req_user = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, verbose_name="访问者", help_text="访问者")
+    resp_body = models.TextField(null=True, verbose_name="响应body", help_text="响应body")
+    resp_status_code = models.SmallIntegerField(null=True,verbose_name="响应状态码", help_text="响应状态码")
+    resp_time = models.IntegerField(null=True, verbose_name="请求耗时", help_text="请求耗时")
 
     class Meta:
         db_table = "access_log"

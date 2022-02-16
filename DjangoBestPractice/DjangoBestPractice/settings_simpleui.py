@@ -5,7 +5,7 @@
 from django.contrib import admin
 
 admin.AdminSite.site_header = "Django最佳实践"
-admin.AdminSite.site_title = "01"
+admin.AdminSite.site_title = "python Django 最佳实践"
 
 
 SIMPLEUI_INDEX = '/'
